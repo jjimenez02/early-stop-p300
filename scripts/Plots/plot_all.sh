@@ -24,9 +24,6 @@ results_path="$1"
 plots_dir="scripts/Plots"
 output_dir="Results/Methods Comparison"
 
-# First execute the subject comparisons' plots
-./scripts/Plots/execute_all_sbjs_comparisons.sh
-
 # Remove old results
 trash-put "$output_dir"/*
 

@@ -51,22 +51,25 @@ There are four data formats employed along all the scripts:
 
 # Code hierarchy
 The code is divided into the following folders:
-- `Baseline/`: TODO explain a bit
-    - TODO: Briefly explain every script
-- `Fixed Parameters/`: TODO explain a bit
-    - TODO: Briefly explain every script
-- `First Coincidence/`: TODO explain a bit
-    - TODO: Briefly explain every script
-- `Gain - Loss balance/`: TODO explain a bit
-    - TODO: Briefly explain every script
-- `scripts/`: TODO explain a bit
-    - `LDA`: TODO explain a bit
-        - TODO: Briefly explain every script
-    - `Plots`: TODO explain a bit
-        - TODO: Briefly explain every script
-    - `Preprocessing`: TODO explain a bit
-        - TODO: Briefly explain every script
-- `execute_all_methods.sh`: TODO explain a bit
+- `Baseline/`: this folder contains everything related with the baseline method against every other early stopping method will be compared. To explain it further, this baseline method consists of a fixed stop strategy at the 20th trial.
+- `Fixed Parameters/`: in this directory statistical tests early stopping methods are employed by fixing the statistical test from a selection of tests (Kolmogorov-Smirnov, TTest, Welch's TTest, ...), the significance level $\alpha$ and whether to apply Bonferroni's criteria or not.
+    - `stat_test_gain_loss_metrics_script.py`: it defines the statistical test early stopping method with Cross-Validation (it won't optimise any parameter).
+    - `acc_evid_stat_test_gain_loss_metrics_script.py`: this script defines the accumulated evidence variant for the statistical test early stopping methods with Cross-Validation (it won't optimise any parameter).
+    - `acc_avg_diff_stat_test_gain_loss_metrics_script.py`: this script defines the accumulated averaged differences variant for the statistical test early stopping methods with Cross-Validation (it won't optimise any parameter).
+- `First Coincidence/`: directory with a family of early stopping algorithms that optimise their values by fixing the parameter once they succeed for the first time in their prediction.
+    - `fixed_stop_optimization_script.py`: early stopping strategy which optimises the number of trials employed.
+    - `acc_evid_threshold_optimization_script.py`: scripts which optimises the accumulated evidence threshold.
+    - `acc_avg_diff_threshold_optimization_script.py`: early stopping strategy that optimises the accumulated average differences among stimulus.
+- `Gain - Loss balance/`: folder containing scripts from the `First Coincidence` and `Fixed Parameters` folders to optimise their parameters trying to balance the `(Gain+Loss)/2` metric.
+- `scripts/`: this folder contains some useful scripts to execute the early stopping algorithms.
+    - `LDA`: container of the Bayesian Linear Discriminant Analysis' scripts.
+    - `Plots`: folder with useful plots to visualize the results.
+        - `prepare_data.py`: this script formats the early stopping algorithms outputs to create a single dictionary with all the results.
+        - `sbjs_*_plot(s)_script.py`: these scripts plot different visualizations for **each subject** that goes from regular curves, bar-plots and radar/spider plots, we strongly recommend the last visualization.
+        - `auc_bar_plots_script.py`: a script that obtains the average and standard deviations for every early stopping result along all subjects to compare the area under the curve of every method (i.e. a global punctuation to know how well it works on all the subjects).
+        - `*.sh`: different bash scripts to show some of the early stopping variants results, remember that we have plenty of methods that could be compared, so these scripts just extract a small subset of these methods to ease the comparisons. Please note that the RegExp used to filter the methods were handmade obtained by just considering the algorithms with the highest score in their own folder (i.e. the highest of `First Coincidence` vs the highest of `Fixed Parameters` vs ...), this may look like an arbitrary comparison for you, feel free to modify the RegExps and the scripts to make your own comparisons.
+    - `Preprocessing`: directory with the pre-processing routines to apply over the original EEG data.
+- `execute_all_methods.sh`: bash script which executes all the early stopping methods, beware of it as it executes in the background most of the early stopping algorithms, i.e. a computer with low resources might crash!
 
 # Environment
 The original environment used to execute this code was:

@@ -70,9 +70,21 @@ The code is divided into the following folders:
         - `*.sh`: different bash scripts to show some of the early stopping variants results, remember that we have plenty of methods that could be compared, so these scripts just extract a small subset of these methods to ease the comparisons. Please note that the RegExp used to filter the methods were handmade obtained by just considering the algorithms with the highest score in their own folder (i.e. the highest of `First Coincidence` vs the highest of `Fixed Parameters` vs ...), this may look like an arbitrary comparison for you, feel free to modify the RegExps and the scripts to make your own comparisons.
     - `Preprocessing`: directory with the pre-processing routines to apply over the original EEG data.
 - `execute_all_methods.sh`: bash script which executes all the early stopping methods, beware of it as it executes in the background most of the early stopping algorithms, i.e. a computer with low resources might crash!
+- `outputs.tgz`: a compressed file with the results, this file is provided to avoid the execution of all early stopping algorithms to the user.
 
 # Environment
 The original environment used to execute this code was:
 - OS: Arch Linux - EndeavourOS (64b)
 - Python: 3.10.14
 - Packages: they can be found within the `requirements.txt` file.
+
+# Reproduce master thesis
+To reproduce the thesis:
+1. Open your Linux system, prepare the Python environment, install the requirements, and change your directory to the repository's root folder.
+2. Execute all the early stopping strategies by doing `$ ./execute_all_methods.sh` (this will probably take some hours as it will execute 66 early stopping methods within a 4-fold Cross-Validation loop).
+    - Alternatively, you can extract the `outputs.tgz` file with `$ tar -xzvf outputs.tgz` within the repository's root directory to avoid executing all the scripts.
+3. Gather all the results within a single dictionary by executing `$ python scripts/Plots/prepare_data.py -id . -o out/all_results.pkl`
+4. Generate the partial comparisons by executing `$ ./scripts/Plots/plot_all.sh out/all_results.pkl` (this will generate a `Results` folder automatically), this may take some seconds as they are quite a few.
+5. Generate the final comparisons by executing `$ ./scripts/Plots/plot_final_comparison.sh out/all_results.pkl Results/Final_Comparisons`
+
+You are done! ;)

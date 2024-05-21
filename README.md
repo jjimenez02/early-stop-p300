@@ -81,10 +81,12 @@ The original environment used to execute this code was:
 # Reproduce master thesis
 To reproduce the thesis:
 1. Open your Linux system, prepare the Python environment, install the requirements, and change your directory to the repository's root folder.
-2. Execute all the early stopping strategies by doing `$ ./execute_all_methods.sh` (this will probably take some hours as it will execute 66 early stopping methods within a 4-fold Cross-Validation loop).
+2. Download the data and save it within the repository's root folder (let's imagine you did so by saving it within a folder called `data/OriginalDataEPFL/`).
+3. Preprocess the data and save the results within the `preproc/` folder by executing `$ ./scripts/Preprocessing/preproc_all.sh scripts/Preprocessing/preproc_script.py data/OriginalDataEPFL/ preproc all_electrodes 1 32` (this may take a minute).
+4. Execute all the early stopping strategies by doing `$ ./execute_all_methods.sh preproc` (this will probably take some hours as it will execute 66 early stopping methods within a 4-fold Cross-Validation loop).
     - Alternatively, you can extract the `outputs.tgz` file with `$ tar -xzvf outputs.tgz` within the repository's root directory to avoid executing all the scripts.
-3. Gather all the results within a single dictionary by executing `$ python scripts/Plots/prepare_data.py -id . -o out/all_results.pkl`
-4. Generate the partial comparisons by executing `$ ./scripts/Plots/plot_all.sh out/all_results.pkl` (this will generate a `Results` folder automatically), this may take some seconds as they are quite a few.
-5. Generate the final comparisons by executing `$ ./scripts/Plots/plot_final_comparison.sh out/all_results.pkl Results/Final_Comparisons`
+5. Gather all the results within a single dictionary by executing `$ python scripts/Plots/prepare_data.py -id . -o out/all_results.pkl`
+6. Generate the partial comparisons by executing `$ ./scripts/Plots/plot_all.sh out/all_results.pkl` (this will generate a `Results` folder automatically), this may take some seconds as they are quite a few.
+7. Generate the final comparisons by executing `$ ./scripts/Plots/plot_final_comparison.sh out/all_results.pkl Results/Final_Comparisons`
 
 You are done! ;)

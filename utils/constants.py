@@ -5,7 +5,8 @@ This module will define some constant values.
 (javier.jimenez02@estudiante.uam.es)
 :Date: 02/02/2024
 '''
-from scipy.stats import (ranksums,
+import numpy as np
+from scipy.stats import (wilcoxon,
                          mannwhitneyu,
                          ttest_ind,
                          ks_2samp)
@@ -71,7 +72,57 @@ def ttest_welch(a, b, **kwargs):
     return ttest_ind(a, b, equal_var=False, **kwargs)
 
 
-AVAILABLE_TESTS = [ranksums, ttest_ind, mannwhitneyu, ttest_welch, ks_2samp]
+def custom_wilcoxon(a, b, **kwargs):
+    '''
+    This wrapper is done in order to avoid
+    errors when all the differences between both
+    populations are zeroes, but the underlying
+    functionality is the same as expected by
+    Wilcoxon.
+
+    In particular, we avoid doing the Wilcoxon
+    stat test of two equal populations, instead
+    we directly write a p-value of "1" for that
+    scenario.
+    '''
+    n_runs, _, n_flashes = b.shape
+
+    statistic = np.zeros(
+        (n_runs, n_flashes))
+    pvalue = np.zeros(
+        (n_runs, n_flashes))
+
+    # See what stimulus are repeated
+    matches = np.all(a == b, axis=(0, 1))
+
+    # We assign the p-vals for the repeated column
+    pvalue[:, matches] = 1
+
+    # We remove "a" stimuli from "b"
+    b_exclusive = b[:, :, ~matches]
+
+    # Perform the test
+    stats = wilcoxon(
+        a, b_exclusive, **kwargs)
+
+    # Save the values
+    statistic[:, ~matches] += stats.statistic
+    pvalue[:, ~matches] += stats.pvalue
+
+    # We simulate a WilcoxonResult object
+    wilcoxon_result = type(
+        'WilcoxonResult', (), {})()
+    wilcoxon_result.statistic = statistic
+    wilcoxon_result.pvalue = pvalue
+
+    return wilcoxon_result
+
+
+AVAILABLE_TESTS = [
+    custom_wilcoxon, ttest_ind,
+    mannwhitneyu, ttest_welch,
+    ks_2samp
+]
 
 # Metrics
 METRICS_FULL_NAMES = {

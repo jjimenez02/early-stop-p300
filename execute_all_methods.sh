@@ -49,7 +49,7 @@ trash-put "$gl_bal_dir"/Acc_Evid_Stat_Test_Bonferroni
 trash-put "$baseline_dir"/Baseline
 
 # List of tests
-tests=("mannwhitneyu" "ttest_ind" "ranksums" "ks_2samp" "ttest_welch")
+tests=("mannwhitneyu" "ttest_ind" "custom_wilcoxon" "ks_2samp" "ttest_welch")
 
 # Tests execution
 all_tests(){

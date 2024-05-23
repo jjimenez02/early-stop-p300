@@ -8,7 +8,7 @@ fi
 
 # Constants
 METRICS=("GAIN" "LOSS" "CONS" "GAIN+CONS÷2")
-REGEXP="Acc Evid Threshold - First Coincidence|Acc Avg Diff Stat Test - Fixed alpha:0.05 - ttest_ind - Bonferroni: True|Acc Avg Diff Stat Test - Fixed alpha:0.05 - ranksums - Bonferroni: False|Acc Avg Diff Threshold - G-L Bal|Acc Avg Diff Stat Test - G-L Bal - ranksums - Bonferroni: True|Acc Avg Diff Stat Test - G-L Bal - mannwhitneyu - Bonferroni: False"
+REGEXP="Acc Evid Threshold - First Coincidence|Acc Avg Diff Stat Test - Fixed alpha:0.05 - ttest_ind - Bonferroni: True|Acc Avg Diff Stat Test - Fixed alpha:0.05 - ttest_ind - Bonferroni: False|Acc Avg Diff Threshold - G-L Bal|Acc Avg Diff Stat Test - G-L Bal - ttest_ind - Bonferroni: True|Acc Avg Diff Stat Test - G-L Bal - mannwhitneyu - Bonferroni: False"
 
 # Arguments
 results_path="$1"

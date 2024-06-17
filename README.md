@@ -73,8 +73,11 @@ The code is divided into the following folders:
 # Environment
 The original environment used to execute this code was:
 - OS: Arch Linux - EndeavourOS (64b)
+    - Packages:
+        - Bash Shell 5.2.26
+        - [trash-cli](https://github.com/andreafrancia/trash-cli), a useful package to avoid screwing it up again and again with the damn `rm` command.
 - Python: 3.10.14
-- Packages: they can be found within the `requirements.txt` file.
+    - Packages: they can be found within the `requirements.txt` file.
 
 # Reproduce master thesis
 To reproduce the thesis:
@@ -84,7 +87,7 @@ To reproduce the thesis:
 ```shell
 $ ./scripts/Preprocessing/preproc_all.sh scripts/Preprocessing/preproc_script.py data/OriginalDataEPFL/ preproc all_electrodes 1 32
 ```
-4. Execute all the early stopping strategies by doing `$ ./execute_all_methods.sh preproc` (this will probably take some hours as it will execute 66 early stopping methods within a 4-fold Cross-Validation loop).
+4. Execute all the early stopping strategies by doing `$ ./execute_all_methods.sh preproc` (this will probably take some hours as it will execute 67 early stopping methods within a 4-fold Cross-Validation loop).
     - Alternatively, you can extract the `outputs.tgz` file with `$ tar -xzvf outputs.tgz` within the repository's root directory to avoid executing all the scripts.
 5. Gather all the results within a single dictionary by executing:
 ```shell

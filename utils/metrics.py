@@ -37,6 +37,9 @@ def itr(n_classes: int,
     :return float: Information Transfer Rate metric
     in bits/min.
     '''
+    if clf_acc >= 1:
+        clf_acc = .999
+
     return (60/trial_secs) * (
         math.log2(n_classes) +
         clf_acc * math.log2(clf_acc) + (1 - clf_acc) *
@@ -75,6 +78,46 @@ def bci_utility(
             (2*clf_acc - 1) *
             (math.log2(n_classes - 1))
         )/trial_secs
+
+
+def spm(
+        n_classes: int,
+        clf_acc: float,
+        trial_secs: float) -> float:
+    '''
+    This method will compute the Symbols
+    Per Minute of a classifier from its
+    accuracy, number of choices, and prediction
+    time of one trial.
+
+    WARNING: The number of classes parameter is
+    not used, this metric will correspond with
+    a control interface instead of a speller,
+    i.e. it can only make a decission within the
+    `trial_secs` range. In other words, the number
+    of decissions per minute is `(1/trial_secs)*(60s/1min)`.
+
+    Example:
+    ```
+    spm(n_classes=6, clf_acc=.6, trial_secs=2)
+    ----- Output -----
+    5.999999999999998
+    ```
+
+    :param n_classes: Classifier's number of choices,
+    or number of the problem's classes.
+    :param clf_acc: Classifier's accuracy.
+    :param trial_secs: One trial's prediction
+    time in seconds.
+
+    :return float: Symbols per minute.
+    '''
+    correct_percent = clf_acc
+    incorrect_percent = 1 - clf_acc
+    decs_per_min = (1/trial_secs) * 60  # From secs to mins
+
+    return decs_per_min * (
+        correct_percent - incorrect_percent)
 
 
 def get_seq_pred(
@@ -129,98 +172,6 @@ def get_seq_pred(
     n_runs, n_trials, _ = y_pred.shape
     return np.argmax(y_pred, axis=2) if _max else\
         np.argmin(y_pred, axis=2)
-
-
-def custom_spm(
-        run_es: np.ndarray,
-        stim_tgt_seq: np.ndarray,
-        stim_pred_seq: np.ndarray,
-        times: np.ndarray) -> np.ndarray:
-    '''
-    This method will obtain a custom measure of
-    the symbols per minute inspired on DOI:
-    10.1109/IEMBS.2011.6091134
-
-    We specify "custom" because we will consider
-    already stopped runs as part of posterior
-    computations to build a continuous curve
-    rather than a peaked-like one.
-
-    Example:
-    ```
-    np.random.seed(1234)
-
-    n_runs = 6
-    n_trials = 20
-    n_flashes = 6
-
-    run_es = np.random.randint(
-        0, n_trials, size=n_runs)
-    stim_tgt_seq = np.random.randint(
-        0, n_flashes, size=n_runs)
-    stim_pred_seq = np.random.randint(
-        0, n_flashes, size=(n_runs, n_trials))
-    times = gen_secs_spent_arr(
-        epoch_len=1,
-        isi=.4,
-        trial_epochs=n_flashes,
-        n_trials=n_trials,
-        overlapped=True
-    )/60  # To transform it into minutes
-
-    metric = custom_spm(
-        run_es, stim_tgt_seq,
-        stim_pred_seq, times
-    )
-
-    print("METRIC:")
-    print(metric)
-    ----- Output -----
-    METRIC:
-    [ 0.          0.          0.          0.          0.          0.
-     -2.85714286 -2.5        -2.22222222 -2.         -1.81818182 -1.66666667
-     -3.07692308 -2.85714286 -2.66666667 -2.5        -4.70588235  1.11111111
-     -5.26315789 -6.        ]
-    ```
-
-    :param run_es: 1D array with the trial indexes
-    at which every run stopped, shape: (n_runs,).
-    :param stim_tgt_seq: 1D array with the target
-    stimuli per run, shape (n_runs,).
-    :param stim_pred_seq: 2D array with the predicted
-    stimuli per run and trial, shape (n_runs, n_trials).
-    :param times: 1D array with the time spent per trial
-    every element should be measured in minutes, shape:
-    (n_trials,).
-
-    :return np.ndarray: 1D array with the score per trial,
-    shape: (n_trials,).
-    '''
-    y_preds = (stim_tgt_seq[:, np.newaxis]
-               == stim_pred_seq)
-    n_runs, n_trials = y_preds.shape
-
-    spm = np.zeros(n_trials)
-    for trial_idx in range(n_trials):
-        stopped_runs_idxs = np.where(
-            run_es <= trial_idx)[0]
-
-        n_stops = len(stopped_runs_idxs)
-        curr_time = times[trial_idx]
-        dpm = n_stops/curr_time
-
-        if n_stops == 0:
-            score = 0
-        else:
-            correct_runs = np.count_nonzero(
-                y_preds[stopped_runs_idxs, trial_idx])
-            incorrect_runs = n_stops - correct_runs
-            score = (correct_runs/n_stops) -\
-                (incorrect_runs/n_stops)
-
-        spm[trial_idx] = dpm * score
-
-    return spm
 
 
 def gain(t_max: int, t_star: int) -> float:

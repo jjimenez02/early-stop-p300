@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from matplotlib.spines import Spine
-from typing import List, Tuple, Dict
 from matplotlib.transforms import Affine2D
+from typing import List, Tuple, Dict, Union
 from matplotlib.projections.polar import PolarAxes
 from matplotlib.patches import Circle, RegularPolygon
 from matplotlib.projections import register_projection
@@ -155,7 +155,10 @@ def scores_bar_plot(
         yerr: Dict[str, List[float]] = None,
         bars_width: float = .25,
         figsize: Tuple[int, int] = (10, 10),
-        rotation: int = 45) -> None:
+        rotation: int = 45,
+        ymax: float = 1,
+        fontsize: float = 10,
+        legend_fontsize: Union[float, str] = 'small') -> None:
     '''
     This method will plot a grouped-bar-plot,
     adapted from:
@@ -200,6 +203,9 @@ def scores_bar_plot(
     0.25.
     :param fig_size: Figure's size, defaults to (10, 10)
     :param rotation: XLabel's rotation.
+    :param ymax: Maximum OY value to plot, defaults to 1.
+    :param fontsize: Labels & title fontsize, defaults to 10.
+    :param legend_fontsize: Legend fontsize, defaults to 'small'.
     '''
     x = np.arange(len(names))  # the label locations
     multiplier = 0
@@ -232,24 +238,35 @@ def scores_bar_plot(
         )
         multiplier += 1
 
-    ax.set_xticks(
-        x + bars_width,
-        names,
-        rotation=rotation
+    if len(scores.keys()) == 1:
+        ax.set_xticks(
+            x,
+            names,
+            rotation=rotation
+        )
+    else:
+        ax.set_xticks(
+            x + bars_width,
+            names,
+            rotation=rotation
+        )
+
+    ax.set_xlabel(xlabel, fontsize=fontsize)
+    ax.set_ylabel(ylabel, fontsize=fontsize)
+    ax.set_title(title, fontsize=fontsize)
+
+    ax.legend(
+        loc='lower left',
+        framealpha=.6,
+        fontsize=legend_fontsize
     )
-
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    ax.set_title(title)
-
-    ax.legend(loc='lower left', framealpha=.6)
     ax.grid(linestyle='dotted')
 
     if ymin is None:
         ax.set_ylim(
-            global_min_val - 1e-3, 1)
+            global_min_val - 1e-3, ymax)
     else:
-        ax.set_ylim(ymin - 1e-3, 1)
+        ax.set_ylim(ymin - 1e-3, ymax)
 
 
 def radar_factory(
@@ -312,7 +329,7 @@ def radar_factory(
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             # rotate plot such that the first axis is at the top
-            self.set_theta_zero_location('N')
+            self.set_theta_zero_location('N', offset=22)
 
         def fill(self, *args, closed=True, **kwargs):
             """Override fill so that line is closed by default"""

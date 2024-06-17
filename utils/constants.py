@@ -34,7 +34,7 @@ HOFF_DAYS = [1, 2]
 FIGS_DIR = "figs/"
 
 # More utilities
-FONT_SIZE = 18
+FONT_SIZE = 30
 
 LINESTYLES = [
     (0, (1, 10)),
@@ -54,7 +54,7 @@ LINESTYLES = [
 COLORS = [
     "#000000",
     "#000080",
-    "#C0C0C0",
+    "#43FF00",
     "#808080",
     "#800000",
     "#FF0000",
@@ -126,10 +126,10 @@ AVAILABLE_TESTS = [
 
 # Metrics
 METRICS_FULL_NAMES = {
-    "GAIN": "Gain",
-    "LOSS": "Loss",
-    "CONS": "Conservation",
-    "GAIN+CONS÷2": "(Gain + Conservation) ÷ 2"
+    "GAIN": "Ganancia",
+    "LOSS": "Pérdida",
+    "CONS": "Conservación",
+    "GAIN+CONS÷2": "(Ganancia + Conservación) ÷ 2"
 }
 
 METRIC_COLORS = {
@@ -148,3 +148,7 @@ COLOR_NON_P300 = COLORS[-1]
 
 # Labels
 IS_TGT = 1
+
+# Control & Disabled names
+SBJ_NAME_CTRL = "Sin problemas conocidos"
+SBJ_NAME_DSBL = "Con problemas neurodegenerativos"

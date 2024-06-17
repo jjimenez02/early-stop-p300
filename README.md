@@ -2,8 +2,6 @@
 This repository is uploaded as a result of the master's thesis *Un Enfoque Integrado para Mejorar la Eficiencia
 de la Detección de Eventos P300 para BCIs online*.
 
-TODO: Publish doc link here
-
 # Terms' dictionary
 If you came straight from reading the master's thesis here some useful terms translation (from Spanish to English) are provided:
 - *Muestra* -> Sample
@@ -19,7 +17,7 @@ Every script and function has its own header with a brief description of its fun
 # Data organization
 This work is mostly based on Ulrich Hoffmann et. al. work: Hoffmann, Ulrich, Jean-Marc Vesin, Touradj Ebrahimi, and Karin Diserens. ‘An Efficient P300-Based Brain–Computer Interface for Disabled Subjects’. Journal of Neuroscience Methods 167, no. 1 (January 2008): 115–25. https://doi.org/10.1016/j.jneumeth.2007.03.005
 
-We recommend to familiarise with the original data's structure and the experiment performed by the authors, the data can be downloaded from here: TODO publish data link here
+We recommend to familiarise with the original data's structure and the experiment performed by the authors, the data can be downloaded from [here]{https://www.epfl.ch/labs/mmspg/research/page-58317-en-html/bci-2/bci_datasets/}.
 
 # General data formatting
 ## General data structures
@@ -88,5 +86,10 @@ To reproduce the thesis:
 5. Gather all the results within a single dictionary by executing `$ python scripts/Plots/prepare_data.py -id . -o out/all_results.pkl`
 6. Generate the partial comparisons by executing `$ ./scripts/Plots/plot_all.sh out/all_results.pkl` (this will generate a `Results` folder automatically), this may take some seconds as they are quite a few.
 7. Generate the final comparisons by executing `$ ./scripts/Plots/plot_final_comparison.sh out/all_results.pkl Results/Final_Comparisons`
+8. Generate the appendix results by executing: TODO
+```
+$
+$
+```
 
 You are done! ;)

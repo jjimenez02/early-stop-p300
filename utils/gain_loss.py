@@ -12,6 +12,9 @@ from pathlib import Path
 from plots import save_plot
 from typing import List, Any
 import matplotlib.pyplot as plt
+from constants import (METRICS_FULL_NAMES,
+                       METRIC_COLORS,
+                       FONT_SIZE)
 from math_master import (find_intersections,
                          find_shared_maximum)
 
@@ -194,10 +197,15 @@ def obtain_gain_loss_shared_max(
     :return float: The value at which both curves
     intersect.
     '''
+    def fun(x, y): return (x+y)/2.0
+
+    plt.rcParams['xtick.labelsize'] = FONT_SIZE/2.5
+    plt.rcParams['ytick.labelsize'] = FONT_SIZE/2.5
+
     x_max, y_max = find_shared_maximum(
         ox, ox, gains,
         1-losses, xlim,
-        fun=lambda x, y: x+y
+        fun=fun
     )
 
     if plot:
@@ -208,11 +216,26 @@ def obtain_gain_loss_shared_max(
 
     # Create a plot to see the curves
     if plot:
-        plt.plot(ox, gains, label="Gain")
-        plt.plot(ox, 1-losses, label="Conservation")
-        plt.scatter(
-            t_x, y_max,
-            label="Chosen value"
+        plt.plot(
+            ox, fun(gains, 1-losses),
+            label=METRICS_FULL_NAMES["GAIN+CONS÷2"],
+            color=METRIC_COLORS["GAIN+CONS÷2"]
+        )
+        plt.plot(
+            ox, gains,
+            label=METRICS_FULL_NAMES["GAIN"],
+            color=METRIC_COLORS["GAIN"]
+        )
+        plt.plot(
+            ox, 1-losses,
+            label=METRICS_FULL_NAMES["CONS"],
+            color=METRIC_COLORS["CONS"]
+        )
+        plt.vlines(
+            t_x, 0, 1.1,
+            linestyles='--',
+            color="red",
+            label="Valor escogido β"
         )
 
         plt.xticks(
@@ -221,16 +244,25 @@ def obtain_gain_loss_shared_max(
         )
 
         plt.ylim((0, 1.1))
-        plt.xlabel(xlabel)
-        plt.ylabel("Metric")
+        plt.xlabel(
+            xlabel,
+            fontsize=FONT_SIZE
+        )
+        plt.ylabel(
+            "Metric",
+            fontsize=FONT_SIZE
+        )
 
         if invert_xaxis:
             plt.gca().invert_xaxis()
 
         plt.grid()
-        plt.legend()
+        plt.legend(fontsize="x-large")
 
-        plt.title(title)
+        plt.title(
+            title,
+            fontsize=FONT_SIZE
+        )
         plt.tight_layout()
         save_plot(str(out_dir / title))
 

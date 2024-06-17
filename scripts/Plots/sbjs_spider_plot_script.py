@@ -21,10 +21,16 @@ from constants import (HOFF_SUBJECTS,
                        METHOD_NAME_BASELINE,
                        LINESTYLES,
                        COLORS,
-                       METRICS_FULL_NAMES)
+                       METRICS_FULL_NAMES,
+                       SBJ_NAME_CTRL,
+                       SBJ_NAME_DSBL)
 from report_utils import (get_acronym,
                           obtain_n_best_methods)
 
+FONT_SIZE = 20
+
+plt.rcParams['xtick.labelsize'] = FONT_SIZE
+plt.rcParams['ytick.labelsize'] = FONT_SIZE
 
 parser = argparse.ArgumentParser()
 
@@ -162,16 +168,50 @@ if __name__ == '__main__':
         )
 
     # Aesthetic
-    axs.set_varlabels([f"S{i}" for i in HOFF_SUBJECTS])
-    axs.set_ylim(0, 1)
-    plt.title(f"{METRICS_FULL_NAMES[args.metric]} scores")
-
-    plt.legend(
-        loc=(0.9, 0.9),
-        ncol=math.ceil(
-            len(all_methods)/3),
-        fontsize="small"
+    axs.set_varlabels(
+        [f"S{i}" for i in HOFF_SUBJECTS],
     )
+    axs.set_ylim(0, 1)
+    plt.title(
+        f"{METRICS_FULL_NAMES[args.metric]}",
+        fontsize=FONT_SIZE
+    )
+
+    if len(all_methods) == 4:
+        plt.legend(
+            loc=(0.12, -0.2),
+            ncol=math.ceil(
+                len(all_methods)/3),
+            fontsize="xx-large"
+        )
+    else:
+        plt.legend(
+            loc=(-0.09, -0.2),
+            ncol=math.ceil(
+                len(all_methods)/3),
+            fontsize="xx-large"
+        )
+
+    # Vertical line
+    vlin = fig.add_subplot(111)
+    vlin.vlines(15, 0, 15, colors="k")
+    vlin.set_xlim([10, 20])
+    vlin.set_ylim([0, 10])
+    vlin.axis("off")
+
+    # Text dividing control & disabled
+    texts = fig.add_subplot(111)
+    texts.text(
+        0, 0.19, SBJ_NAME_DSBL,
+        fontsize=FONT_SIZE,
+        rotation=90
+    )
+    texts.text(
+        1, 0.28, SBJ_NAME_CTRL,
+        fontsize=FONT_SIZE,
+        rotation=90
+    )
+    texts.axis("off")
 
     plt.tight_layout()
 

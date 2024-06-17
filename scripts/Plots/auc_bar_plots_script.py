@@ -22,6 +22,10 @@ from constants import (HOFF_SUBJECTS,
 from report_utils import (get_acronym,
                           obtain_n_best_methods)
 
+FONT_SIZE = 20
+
+plt.rcParams['xtick.labelsize'] = FONT_SIZE
+plt.rcParams['ytick.labelsize'] = FONT_SIZE
 
 parser = argparse.ArgumentParser()
 
@@ -139,16 +143,17 @@ if __name__ == "__main__":
             METRICS_FULL_NAMES[args.metric]:
                 METRIC_COLORS[args.metric]
         },
-        xlabel="Methods",
+        xlabel="Métodos",
         ylabel=METRICS_FULL_NAMES[args.metric],
-        title=f"{METRICS_FULL_NAMES[args.metric]} " +
-        "averaged AUC scores of all subjects",
+        title="Puntuación de sujetos en promedio",
         ymin=0,
         yerr={
             METRICS_FULL_NAMES[args.metric]:
                 scores_std[scores_sorted_idxs],
         },
-        rotation=45
+        rotation=90,
+        fontsize=FONT_SIZE,
+        legend_fontsize="x-large"
     )
 
     # Save plots

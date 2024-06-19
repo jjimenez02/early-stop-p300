@@ -60,7 +60,7 @@ def bci_utility(
     ```
     bci_utility(n_classes=6, clf_acc=.6, trial_secs=2)
     ----- Output -----
-    0.23219280948873616
+    13.93156856932417
     ```
 
     :param n_classes: Classifier's number of choices,
@@ -69,15 +69,15 @@ def bci_utility(
     :param trial_secs: One trial's prediction
     time in seconds.
 
-    :return float: BCI-Utility metric.
+    :return float: BCI-Utility metric in bits/min.
     '''
     if clf_acc <= 0.5:
         return 0
     else:
-        return (
+        return (60/trial_secs) * (
             (2*clf_acc - 1) *
             (math.log2(n_classes - 1))
-        )/trial_secs
+        )
 
 
 def spm(
